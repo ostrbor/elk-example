@@ -11,8 +11,8 @@ services:
     #   - "9200:9200"
     #   - "9300:9300"
     environment:
-      # Lower memory for JVM, if bigger that elasticsearch might exit with error
-      ES_JAVA_OPTS: "-Xms512m -Xmx512m"
+      # NOTE: ram can be lowered to avoid problem with startup of elasticsearch
+      ES_JAVA_OPTS: "-Xms1024m -Xmx1024m"
       # disable X-Pack
       xpack.security.enabled: "false"
       xpack.monitoring.enabled: "false"
