@@ -1,0 +1,8 @@
+You need Docker, docker-compose and Fabric3.
+
+To run ELK stack:
+1. git pull
+2. fab elk
+3. edit my_logs.log (add any record)
+4. visit kibana https://localhost
+5. click create button to create index
