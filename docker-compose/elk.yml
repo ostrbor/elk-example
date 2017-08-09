@@ -1,0 +1,58 @@
+version: '2'
+
+services:
+
+  elasticsearch:
+    build: elasticsearch/
+    # These ports are exposed, it means they are available for other services of network
+    # Uncomment ports to publish them, it means they become available from outside of network
+    # Comment to prevent access from Internet to db of elasticsearch
+    # ports:
+    #   - "9200:9200"
+    #   - "9300:9300"
+    environment:
+      # Lower memory for JVM, if bigger that elasticsearch might exit with error
+      ES_JAVA_OPTS: "-Xms512m -Xmx512m"
+      # disable X-Pack
+      xpack.security.enabled: "false"
+      xpack.monitoring.enabled: "false"
+      xpack.graph.enabled: "false"
+      xpack.watcher.enabled: "false"
+
+  logstash:
+    build: logstash/
+    volumes:
+      - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml
+      - ./logstash/pipeline:/usr/share/logstash/pipeline
+    ports:
+      - "5000:5000"
+    depends_on:
+      - elasticsearch
+
+  kibana:
+    build: kibana/
+    volumes:
+      - ./kibana/config/:/usr/share/kibana/config
+    # Hide kibana behind nginx proxy with basic auth
+    # ports:
+    #   - "5601:5601"
+    depends_on:
+      - elasticsearch
+
+  nginx:
+    image: nginx
+    ports:
+      - "443:443"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./nginx/.htpasswd:/etc/nginx/.htpasswd:ro
+      - ./nginx/nginx.key:/etc/nginx/nginx.key:ro # private key for https
+      - ./nginx/nginx.crt:/etc/nginx/nginx.crt:ro # public key for https
+    depends_on:
+      - kibana
+
+  filebeat:
+    image: fiunchinho/docker-filebeat
+    volumes:
+      - ..:/usr/src/app
+      - ./filebeat/filebeat.yml:/filebeat.yml

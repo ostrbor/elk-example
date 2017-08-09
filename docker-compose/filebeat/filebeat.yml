@@ -1,0 +1,14 @@
+filebeat:
+  prospectors:
+    -
+      paths:
+        - "/usr/src/app/my_logs.log"
+      document_type: logstash
+      input_type: log
+         
+output:
+  logstash:
+    hosts: ["logstash:5000"]
+
+
+logging.level: debug
