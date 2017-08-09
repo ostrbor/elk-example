@@ -1,1 +1,4 @@
-
+[main.py:572] - DEBUG - Drivers have been found 3. All drivers: 0: 2017-08-07 14:13:00,110
+[main.py:218] - DEBUG - Start new process: 2017-08-07 14:13:00,287
+[main.py:227] - INFO - Start old version api. Event id: 050052FAD8567BD7: 2017-08-07 14:13:01,246
+[main.py:116] - INFO - Init parser. api_old_key: None. Name: None. Event id: 050052FAD8567BD7: 2017-08-07 14:13:01,396
